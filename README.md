@@ -89,7 +89,7 @@ export default async function Home() {
 
 ```
 
-## Node version
+## Node version et installation de Directus
 
 Directus ne supporte que Node.js 18.17 à 18.x (pas 20.x, pas 22.x pour l’instant).
 
@@ -135,7 +135,7 @@ si le probleme persiste sous Windows desinstaller MVN pour reinstaller la bonne 
 
 .Trouve NVM for Windows dans la liste.
 
-.Cliques sue Désinstaller.
+.Cliques sur Désinstaller.
 
 ## 2.Supprimer le dossier d’installation de NVM
 
@@ -178,8 +178,15 @@ Télécharge Node.js 18.18.2 LTS (Windows installer .msi).
 
 Installe-le (ça remet aussi npm correctement).
 
-## 7.Vérifie :
+## Une fois directus intaller lancer l'installation de next.js
 
+
+## 7.Vérifie :
+```js
 node -v
 npm -v
+```
+
+## Installer Next.js
+
 

@@ -346,5 +346,63 @@ my-website/
 ├── package.json
 └── tsconfig.json
 ```
+## 2. Page principale (app/page.tsx)
 
+Dans l’App Router (app/), crée un fichier page.tsx :
+
+// app/page.tsx
+```js
+import directus from "../lib/directus";
+
+type Article = {
+  id: number;
+  title: string;
+  content: string;
+  image: string;
+};
+
+export default async function Home() {
+  const articlesResponse = await directus.items("articles").readByQuery({
+    fields: ["id", "title", "content", "image"],
+    sort: ["-id"], // derniers articles en premier
+  });
+
+  const articles: Article[] = articlesResponse.data ?? [];
+
+  return (
+    <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+      <h1>Articles</h1>
+      <ul style={{ listStyle: "none", padding: 0 }}>
+        {articles.map((a) => (
+          <li key={a.id} style={{ marginBottom: "2rem" }}>
+            <h2>{a.title}</h2>
+            {a.image && (
+              <img
+                src={`http://localhost:8055/assets/${a.image}`}
+                alt={a.title}
+                width={400}
+              />
+            )}
+            <p>{a.content}</p>
+          </li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+```
+3. Résultat attendu
+
+→Lance Directus sur http://localhost:8055.
+
+Assure-toi d’avoir une collection articles avec des champs (title, content, image).
+
+Lance Next.js :
+```js
+npm run dev
+
+```
+
+Va sur http://localhost:3000
+ → tu verras tes articles affichés.
 

@@ -306,9 +306,9 @@ export default function Home({ articles }) {
 
 ## Exemple en TypeScript (lib/directus.ts)
 ```js
-import { createDirectus, rest, RestClient } from '@directus/sdk';
+// lib/directus.ts
+import { createDirectus, rest, RestClient, RestClientExtensions } from '@directus/sdk';
 
-// Typage générique de ton schéma (optionnel mais conseillé)
 type Schema = {
   articles: {
     id: number;
@@ -318,13 +318,16 @@ type Schema = {
   };
 };
 
-const directus: RestClient<Schema> = createDirectus<Schema>('http://localhost:8055').with(
-  rest({
-    onRequest: (options) => ({ ...options, cache: 'no-store' }),
-  })
-);
+// On précise bien que le client est un RestClient avec les extensions REST
+const directus: RestClient<Schema> & RestClientExtensions<Schema> =
+  createDirectus<Schema>('http://localhost:8055').with(
+    rest({
+      onRequest: (options) => ({ ...options, cache: 'no-store' }),
+    })
+  );
 
 export default directus;
+
 
 ```
 Avantages de .ts au lieu de .js

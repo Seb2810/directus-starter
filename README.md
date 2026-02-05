@@ -94,7 +94,10 @@ export default async function Home() {
 Directus ne supporte que Node.js 18.17 à 18.x (pas 20.x, pas 22.x pour l’instant).
 
 si version > 20.x alors :
-
+ 2 Solutions : 
+ 1. utilser  NVM pour Windows mais cette solution peut poser problème (nvm-setup.exe) voir ci-dessous pour resolution dans cette exemple tout etait bloqué après
+ 2. <ins>desinstaller et reinstaller node manuellement avec la version recommandée par Directus</ins>
+ 
 Télécharge NVM pour Windows :
 👉 nvm-windows
 
@@ -121,3 +124,62 @@ Relance la commande :
 ```js
 npx create-directus-project my-directus-app
 ```
+
+si le probleme persiste sous Windows desinstaller MVN pour reinstaller la bonne version manuellement après
+
+.Tapes pour désinstaller NVM sur Windows
+
+## 1 .Désinstaller via le panneau de configuration
+
+.Va dans : Panneau de configuration > Programmes > Programmes et fonctionnalités.
+
+.Trouve NVM for Windows dans la liste.
+
+.Cliques sue Désinstaller.
+
+## 2.Supprimer le dossier d’installation de NVM
+
+Par défaut, NVM s’installe ici :
+```js
+C:\Users\<TonNom>\AppData\Roaming\nvm
+```
+
+## 3 .Supprime ce dossier à la main s’il reste.
+
+Supprimer les versions de Node installées via NVM
+
+Elles se trouvent dans :
+```js
+C:\Users\<TonNom>\AppData\Roaming\nvm\v*
+```
+
+## 4 .Supprime les sous-dossiers v18.x, v20.x, etc.
+
+Corriger les variables d’environnement
+
+Clique droit sur Ce PC > Propriétés > Paramètres système avancés > Variables d’environnement.
+
+## 5.Vérifie dans Path qu’il n’y a plus de lignes du type :
+```js
+C:\Users\<TonNom>\AppData\Roaming\nvm
+C:\Users\<TonNom>\AppData\Roaming\nvm\v18.18.2
+```
+
+Supprime-les si présentes.
+
+## 6.Vérifie aussi si une variable NVM_HOME ou NVM_SYMLINK existe → supprime-les.
+
+Réinstaller Node.js normalement
+
+Va sur le site officiel : Node.js Downloads
+.
+
+Télécharge Node.js 18.18.2 LTS (Windows installer .msi).
+
+Installe-le (ça remet aussi npm correctement).
+
+## 7.Vérifie :
+
+node -v
+npm -v
+

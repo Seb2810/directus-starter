@@ -454,7 +454,7 @@ Docker Desktop pour Windows :
 (assure-toi que Docker tourne → icône baleine dans la barre de tâches)
 
 Node.js + npm :
-👉 [a  Télécharger ici](https://www.docker.com/products/docker-desktop/)
+👉 [Télécharger ici](https://www.docker.com/products/docker-desktop/)
 
 (prends la version LTS)
 

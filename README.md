@@ -446,8 +446,30 @@ Dans ton terminal (PowerShell ou CMD), choisis un dossier où tu veux travailler
 mkdir my-app && cd my-app
 
 # Crée l'app Next.js
-npx create-next-app@latest frontend
+🚀 Étape 1 : Installer les prérequis
 
+Docker Desktop pour Windows :
+👉 Télécharger ici
+
+(assure-toi que Docker tourne → icône baleine dans la barre de tâches)
+
+Node.js + npm :
+👉 Télécharger ici [a link](https://www.docker.com/products/docker-desktop/)
+
+(prends la version LTS)
+
+🚀 Étape 2 : Créer le projet
+
+Dans ton terminal (PowerShell ou CMD), choisis un dossier où tu veux travailler, puis :
+
+# Crée un dossier projet
+```js
+mkdir my-app && cd my-app
+```
+# Crée l'app Next.js
+```js
+npx create-next-app@latest frontend
+```
 
 👉 Ça va générer ton frontend dans le dossier frontend/.
 

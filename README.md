@@ -600,10 +600,52 @@ npm run dev
 ✅ Résumé
 
 docker-compose.yml pour Directus + SQLite
-
+```js
 docker compose up -d → Directus sur http://localhost:8055/admin
-
+```
 Next.js créé avec create-next-app → tourne sur http://localhost:3000
 
 SDK Directus (@directus/sdk) pour faire la liaison
+
+1. Vérifie que les conteneurs tournent bien
+```js
+docker ps
+```
+
+→ Tu dois voir directus/directus:latest exposé sur le port 8055 et postgres sur 5432.
+
+2. Vérifie les logs de Directus
+```js
+docker logs test-directus-directus-1
+```
+
+démarrage automatique
+
+Si tu veux que tes conteneurs se relancent tout seuls au démarrage de Docker, ajoute dans ton docker-compose.yml :
+```js
+restart: unless-stopped
+```
+
+Exemple pour Directus modifié :
+```js
+services:
+  directus:
+    image: directus/directus:latest
+    ports:
+      - "8056:8055"
+    environment:
+      KEY: "mydirectusapp"
+      SECRET: "supersecret"
+      ADMIN_EMAIL: "admin@example.com"
+      ADMIN_PASSWORD: "password"
+      DB_CLIENT: "pg"
+      DB_HOST: "postgres"
+      DB_PORT: 5432
+      DB_DATABASE: "directus"
+      DB_USER: "directus"
+      DB_PASSWORD: "directus"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+```
 

@@ -88,6 +88,13 @@ export default async function Home() {
 }
 
 ```
+## Lancer l'application
+
+Lance Directus : npm run start (ou docker-compose up -d)
+
+Lance Next.js : npm run dev
+
+Va sur http://localhost:3000 → tu verras la liste de tes articles avec image + contenu 🎉
 
 ## Node version et installation de Directus
 

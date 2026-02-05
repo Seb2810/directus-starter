@@ -554,3 +554,13 @@ npm run dev
 👉 Va sur http://localhost:3000
 , tu devrais voir la liste des collections Directus.
 
+✅ Résumé
+
+docker-compose.yml pour Directus + SQLite
+
+docker compose up -d → Directus sur http://localhost:8055/admin
+
+Next.js créé avec create-next-app → tourne sur http://localhost:3000
+
+SDK Directus (@directus/sdk) pour faire la liaison
+

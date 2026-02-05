@@ -407,3 +407,150 @@ npm run dev
 Va sur http://localhost:3000
  → tu verras tes articles affichés.
 
+ 📌 Ce qu’il faut comprendre
+
+Next.js (starter) → c’est ton frontend. Il ne connaît pas la base. Il envoie juste des requêtes à une API Directus.
+
+Directus → c’est le CMS + l’API REST/GraphQL + l’authentification.
+C’est lui qui gère la connexion à la base de données (Postgres, MySQL, SQLite…).
+
+Quand tu vas sur http://localhost:8055/admin, tu devrais voir l’interface web de Directus.
+
+## Docker exemple du git 
+
+→Lancer
+```js
+docker compose up -d
+```
+➡️ Directus démarre sur http://localhost:8055/admin
+➡️ Identifiant : admin@example.com / password
+
+
+🚀 Étape 1 : Installer les prérequis
+
+Docker Desktop pour Windows :
+👉 Télécharger ici
+
+(assure-toi que Docker tourne → icône baleine dans la barre de tâches)
+
+Node.js + npm :
+👉 Télécharger ici
+
+(prends la version LTS)
+
+🚀 Étape 2 : Créer le projet
+
+Dans ton terminal (PowerShell ou CMD), choisis un dossier où tu veux travailler, puis :
+
+# Crée un dossier projet
+mkdir my-app && cd my-app
+
+# Crée l'app Next.js
+npx create-next-app@latest frontend
+
+
+👉 Ça va générer ton frontend dans le dossier frontend/.
+
+🚀 Étape 3 : Ajouter Directus avec Docker
+
+Toujours dans le dossier my-app/, crée un fichier docker-compose.yml :
+```js
+version: "3.8"
+
+services:
+  directus:
+    image: directus/directus:latest
+    ports:
+      - 8055:8055
+    environment:
+      KEY: "mydirectusapp"
+      SECRET: "supersecret"
+      ADMIN_EMAIL: "admin@example.com"
+      ADMIN_PASSWORD: "password"
+      DB_CLIENT: "sqlite3"
+      DB_FILENAME: "/directus/database/data.db"
+    volumes:
+      - ./directus-data:/directus/database
+
+```
+
+➡️ Ici, Directus va tourner sur http://localhost:8055
+ avec SQLite comme base.
+➡️ Identifiants par défaut :
+```js
+Email : admin@example.com
+
+Mot de passe : password
+```
+🚀 Étape 4 : Lancer Directus
+
+Dans ton terminal, depuis my-app/ :
+```js
+docker compose up -d
+```
+
+👉 Ça va télécharger et lancer Directus.
+👉 Vérifie : ouvre ton navigateur → http://localhost:8055/admin
+
+👉 Connecte-toi avec admin@example.com / password
+
+🎉 Tu as ton Directus Admin qui marche.
+
+🚀 Étape 5 : Connecter Next.js à Directus
+
+Installe le SDK Directus dans ton frontend :
+```js
+cd frontend
+npm install @directus/sdk
+```
+
+Crée un fichier lib/directus.ts dans frontend/ :
+```js
+import { createDirectus, rest } from '@directus/sdk';
+
+const directus = createDirectus('http://localhost:8055').with(rest());
+
+export default directus;
+```
+
+🚀 Étape 6 : Tester dans une page Next.js
+
+Édite frontend/pages/index.tsx :
+```js
+import { useEffect, useState } from "react";
+import directus from "../lib/directus";
+
+export default function Home() {
+  const [collections, setCollections] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function load() {
+      const data = await directus.request(
+        directus.collections.readMany()
+      );
+      setCollections(data);
+    }
+    load();
+  }, []);
+
+  return (
+    <div>
+      <h1>Hello Next.js + Directus 🚀</h1>
+      <ul>
+        {collections.map((col) => (
+          <li key={col.collection}>{col.collection}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+👉 Lance Next.js :
+```js
+npm run dev
+```
+
+👉 Va sur http://localhost:3000
+, tu devrais voir la liste des collections Directus.
+

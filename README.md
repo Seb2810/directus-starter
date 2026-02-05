@@ -194,6 +194,157 @@ node -v
 npm -v
 ```
 
-## Installer Next.js
+##  Où placer lib/directus.js ?
+
+Dans Next.js, on a la liberté de créer un dossier lib/ à la racine du projet pour y mettre nos helpers, fonctions utilitaires, API clients, etc.
+
+Arborescence typique après avoir suivi leur guide :
+```js
+my-website/
+│
+├── app/            # supprimé si tu recommences from scratch
+├── lib/
+│   └── directus.js # ici ton client Directus
+├── node_modules/
+├── package.json
+└── next.config.js
+```
+
+Donc :
+👉 lib est un dossier que tu crées manuellement à la racine de ton projet Next.js.
+
+## Pourquoi supprimer app/ ?
+
+Le guide te fait supprimer app/* pour repartir de zéro et montrer comment brancher Directus étape par étape.
+
+Tu peux très bien garder app/ si tu veux (c’est le mode moderne de Next.js avec l’App Router).
+
+Si tu supprimes app/, tu devras recréer des fichiers comme app/page.js ou pages/index.js (si tu veux revenir à l’ancien système).
+
+👉 Bref :
+
+Avec App Router → garde app/page.js.
+
+Sans App Router (Pages Router) → crée pages/index.js.
+
+## Quelle URL utiliser dans directus.js ?
+
+Dans la doc ils mettent :
+```js
+const directus = createDirectus('https://directus.example.com').with(rest());
+
+```
+
+Mais ça c’est un exemple.
+👉 Toi, tu dois mettre l’URL de ton instance Directus :
+
+Si tu lances Directus en local → généralement :
+```js
+const directus = createDirectus('http://localhost:8055').with(rest());
+```
+
+Si plus tard tu déploies Directus en ligne → tu mets ton vrai domaine (ex: https://cms.monsite.com).
+
+⚠️ Ce n’est pas localhost:3000 → ça c’est ton serveur Next.js.
+Ton Directus tourne sur 8055 par défaut.
+
+## Exemple complet (pages router)
+
+👉 lib/directus.js :
+```js
+import { createDirectus, rest } from '@directus/sdk';
+
+const directus = createDirectus('http://localhost:8055').with(
+  rest({
+    onRequest: (options) => ({ ...options, cache: 'no-store' }),
+  })
+);
+
+export default directus;
+```
+
+👉 pages/index.js :
+```js
+import directus from '../lib/directus';
+
+export async function getServerSideProps() {
+  const articles = await directus.items('articles').readByQuery({
+    fields: ['id', 'title', 'content'],
+  });
+
+  return {
+    props: {
+      articles: articles.data ?? [],
+    },
+  };
+}
+
+export default function Home({ articles }) {
+  return (
+    <main>
+      <h1>Articles</h1>
+      <ul>
+        {articles.map((a) => (
+          <li key={a.id}>
+            <h2>{a.title}</h2>
+            <p>{a.content}</p>
+          </li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+```
+
+ Donc en résumé :
+
+👉lib/ est à la racine du projet.
+
+👉L’URL dans directus.js doit pointer vers Directus (localhost:8055), pas Next.js.
+
+👉Tu choisis si tu bosses avec app/ (nouveau App Router) ou pages/ (ancien Pages Router).
+
+## Exemple en TypeScript (lib/directus.ts)
+```js
+import { createDirectus, rest, RestClient } from '@directus/sdk';
+
+// Typage générique de ton schéma (optionnel mais conseillé)
+type Schema = {
+  articles: {
+    id: number;
+    title: string;
+    content: string;
+    image: string;
+  };
+};
+
+const directus: RestClient<Schema> = createDirectus<Schema>('http://localhost:8055').with(
+  rest({
+    onRequest: (options) => ({ ...options, cache: 'no-store' }),
+  })
+);
+
+export default directus;
+
+```
+Avantages de .ts au lieu de .js
+
+Autocomplétion dans ton IDE : directus.items('articles') te propose directement id, title, content, etc.
+
+Sécurité : si tu te trompes de champ ou de collection, TypeScript te prévient.
+
+Pas besoin de any ou de cast manuel.
+
+Où le mettre ?
+
+Toujours dans ton projet Next.js :
+```js
+my-website/
+├── app/
+├── lib/
+│   └── directus.ts   ✅
+├── package.json
+└── tsconfig.json
+```
 
 

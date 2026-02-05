@@ -482,8 +482,21 @@ Toujours dans le dossier my-app/, crée un fichier docker-compose.yml :
 version: "3.8"
 
 services:
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: directus
+      POSTGRES_PASSWORD: directus
+      POSTGRES_DB: directus
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
   directus:
     image: directus/directus:latest
+    restart: always
     ports:
       - 8055:8055
     environment:
@@ -491,10 +504,16 @@ services:
       SECRET: "supersecret"
       ADMIN_EMAIL: "admin@example.com"
       ADMIN_PASSWORD: "password"
-      DB_CLIENT: "sqlite3"
-      DB_FILENAME: "/directus/database/data.db"
-    volumes:
-      - ./directus-data:/directus/database
+
+      # PostgreSQL settings
+      DB_CLIENT: "pg"
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      DB_DATABASE: "directus"
+      DB_USER: "directus"
+      DB_PASSWORD: "directus"
+    depends_on:
+      - postgres
 
 ```
 

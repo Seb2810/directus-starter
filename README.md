@@ -423,6 +423,7 @@ Quand tu vas sur http://localhost:8055/admin, tu devrais voir l’interface web 
 docker compose up -d
 ```
 ➡️ Directus démarre sur http://localhost:8055/admin
+<br />
 ➡️ Identifiant : admin@example.com / password
 
 
@@ -449,12 +450,13 @@ mkdir my-app && cd my-app
 🚀 Étape 1 : Installer les prérequis
 
 Docker Desktop pour Windows :
-👉 Télécharger ici
+👉 [Télécharger ici](https://www.docker.com/products/docker-desktop/)
 
 (assure-toi que Docker tourne → icône baleine dans la barre de tâches)
 
 Node.js + npm :
-👉 [Télécharger ici](https://www.docker.com/products/docker-desktop/)
+👉 [Télécharger ici](https://nodejs.org/en/download/)
+
 
 (prends la version LTS)
 
@@ -497,7 +499,7 @@ services:
 ```
 
 ➡️ Ici, Directus va tourner sur http://localhost:8055
- avec SQLite comme base.
+ avec SQLite comme base.<br />
 ➡️ Identifiants par défaut :
 ```js
 Email : admin@example.com
@@ -574,7 +576,7 @@ npm run dev
 ```
 
 👉 Va sur http://localhost:3000
-, tu devrais voir la liste des collections Directus.
+ tu devrais voir la liste des collections Directus.
 
 ✅ Résumé
 

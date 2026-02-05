@@ -305,6 +305,17 @@ export default function Home({ articles }) {
 👉Tu choisis si tu bosses avec app/ (nouveau App Router) ou pages/ (ancien Pages Router).
 
 ## Exemple en TypeScript (lib/directus.ts)
+
+Ajouter dans l'import RestClientExtensions
+```js
+import { createDirectus, rest, RestClient } from '@directus/sdk';
+
+```
+Tu as typé directus comme RestClient<Schema>. Mais dans le SDK Directus v10+, RestClient tout seul ne connaît pas les méthodes (items, users, etc.).
+
+👉 C’est pour ça que TypeScript croit que .items() n’existe pas donc ajouter  l'import RestClientExtensions
+
+
 ```js
 // lib/directus.ts
 import { createDirectus, rest, RestClient, RestClientExtensions } from '@directus/sdk';

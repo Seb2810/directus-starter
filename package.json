@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@directus/sdk": "^18.0.3",
+    "dotenv": "^17.2.3",
+    "jwt-decode": "^4.0.0"
+  }
+}

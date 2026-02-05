@@ -306,46 +306,33 @@ export default function Home({ articles }) {
 
 ## Exemple en TypeScript (lib/directus.ts)
 
-Ajouter dans l'import RestClientExtensions
-```js
-import { createDirectus, rest, RestClient } from '@directus/sdk';
-
-```
-Tu as typé directus comme RestClient<Schema>. Mais dans le SDK Directus v10+, RestClient tout seul ne connaît pas les méthodes (items, users, etc.).
-
-👉 C’est pour ça que TypeScript croit que .items() n’existe pas donc ajouter  l'import RestClientExtensions
-
-RestClient<Schema> → c’est juste le client de base.
-
-RestClientExtensions<Schema> → ce sont les méthodes pratiques (items, users, etc.).
-
-Quand tu ajoutes & RestClientExtensions<Schema>, TypeScript sait que .items('articles') existe et qu’il est lié à ton Schema.
-
 ```js
 // lib/directus.ts
-import { createDirectus, rest, RestClient, RestClientExtensions } from '@directus/sdk';
+import { createDirectus, rest } from '@directus/sdk';
 
-type Schema = {
-  articles: {
-    id: number;
-    title: string;
-    content: string;
-    image: string;
-  };
+export type Article = {
+  id: string;
+  title: string;
+  content: string;
+  slug: string;
+  date_created: string;
 };
 
-// On précise bien que le client est un RestClient avec les extensions REST
-const directus: RestClient<Schema> & RestClientExtensions<Schema> =
-  createDirectus<Schema>('http://localhost:8055').with(
-    rest({
-      onRequest: (options) => ({ ...options, cache: 'no-store' }),
-    })
-  );
+export type Schema = {
+  articles: Article[];
+};
 
+const directus = createDirectus<Schema>("http://localhost:8055").with(
+  rest({
+    onRequest: (options) => ({ ...options, cache: "no-store" }),
+  })
+);
 export default directus;
 
-
 ```
+
+directus.items('articles') sera bien reconnu, et typé grâce à <Schema>.
+
 Avantages de .ts au lieu de .js
 
 Autocomplétion dans ton IDE : directus.items('articles') te propose directement id, title, content, etc.
@@ -373,35 +360,20 @@ Dans l’App Router (app/), crée un fichier page.tsx :
 ```js
 import directus from "../lib/directus";
 
-type Article = {
-  id: number;
-  title: string;
-  content: string;
-  image: string;
-};
-
 export default async function Home() {
   const articlesResponse = await directus.items("articles").readByQuery({
     fields: ["id", "title", "content", "image"],
-    sort: ["-id"], // derniers articles en premier
   });
 
-  const articles: Article[] = articlesResponse.data ?? [];
+  const articles = articlesResponse.data ?? [];
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+    <main>
       <h1>Articles</h1>
-      <ul style={{ listStyle: "none", padding: 0 }}>
+      <ul>
         {articles.map((a) => (
-          <li key={a.id} style={{ marginBottom: "2rem" }}>
+          <li key={a.id}>
             <h2>{a.title}</h2>
-            {a.image && (
-              <img
-                src={`http://localhost:8055/assets/${a.image}`}
-                alt={a.title}
-                width={400}
-              />
-            )}
             <p>{a.content}</p>
           </li>
         ))}
@@ -409,7 +381,17 @@ export default async function Home() {
     </main>
   );
 }
+
 ```
+
+⚡ Résumé :
+
+Tu n’as pas besoin de RestClient / RestClientExtensions.
+
+Utilise juste createDirectus<Schema>() et .with(rest()).
+
+TypeScript gère automatiquement .items().
+
 3. Résultat attendu
 
 →Lance Directus sur http://localhost:8055.

@@ -1,5 +1,5 @@
-. Installer Directus
-##Option A : en local avec npx
+## Installer Directus
+## Option A : en local avec npx
 ```js
 npx create-directus-project my-directus-app
 cd my-directus-app
@@ -9,7 +9,7 @@ npm run start
 Par défaut, Directus va démarrer sur http://localhost:8055.
 Tu pourras configurer un utilisateur admin au premier lancement.
 
-##Option B : via Docker
+## Option B : via Docker
 
 Si tu préfères Docker :
 ```js
@@ -36,11 +36,11 @@ Puis :
 docker-compose up -d
 ```
 
-2. Créer une collection dans Directus
+## 2. Créer une collection dans Directus
 
 Dans l’interface admin (http://localhost:8055/admin), crée une collection (par ex. articles) avec des champs (title, content, image, etc.).
 
-3. Installer Next.js
+## 3. Installer Next.js
 
 Dans un nouveau dossier :
 ```js
@@ -48,7 +48,7 @@ npx create-next-app my-next-app
 cd my-next-app
 ```
 
-4. Consommer l’API de Directus dans Next.js
+## 4. Consommer l’API de Directus dans Next.js
 Installer le SDK officiel Directus
 ```js
 npm install @directus/sdk
@@ -87,4 +87,37 @@ export default async function Home() {
   );
 }
 
+```
+
+## Node version
+
+Directus ne supporte que Node.js 18.17 à 18.x (pas 20.x, pas 22.x pour l’instant).
+
+si version > 20.x alors :
+
+Télécharge NVM pour Windows :
+👉 nvm-windows
+
+(prends le fichier nvm-setup.exe).
+
+Installe-le, puis ouvre un nouveau terminal PowerShell ou CMD.
+
+Installe la version recommandée par Directus
+
+Installe la version recommandée par Directus :
+
+```js
+nvm install 18.18.2
+nvm use 18.18.2
+```
+
+Vérifie ta version :
+```js
+node -v
+npm -v
+```
+
+Relance la commande :
+```js
+npx create-directus-project my-directus-app
 ```

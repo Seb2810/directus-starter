@@ -315,6 +315,11 @@ Tu as typé directus comme RestClient<Schema>. Mais dans le SDK Directus v10+, R
 
 👉 C’est pour ça que TypeScript croit que .items() n’existe pas donc ajouter  l'import RestClientExtensions
 
+RestClient<Schema> → c’est juste le client de base.
+
+RestClientExtensions<Schema> → ce sont les méthodes pratiques (items, users, etc.).
+
+Quand tu ajoutes & RestClientExtensions<Schema>, TypeScript sait que .items('articles') existe et qu’il est lié à ton Schema.
 
 ```js
 // lib/directus.ts
